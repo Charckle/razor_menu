@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+
+
+    <!-- Bootstrap CSS -->
+    <link href="{{ url_for('static', filename='main_page_module/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main_page_module/icons/bootstrap_icons/bootstrap-icons.min.css') }}">
+    
+    <script src="{{ url_for('static', filename='main_page_module/jquerry/jquery-3.5.1.min.js') }}"></script>
+
+
+    {% block extraheader %}
+    {% endblock extraheader %}
+
+    <title>{{ config['APP_NAME'] }}</title>
+  </head>
+
+
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="bootstrap" viewBox="0 0 118 94">
+      <title>{{ config['APP_NAME'] }}</title>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"></path>
+    </symbol>
+  </svg>
+    
+  <body>
+
+
+    <div class="container-fluid" >
+    <br>
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+
+      <div class="col-sm-10">
+        <legend>Ta teden</legend> 
+
+        <table class="table">
+          <thead>
+            <tr>
+              {% set this_week = Meal.get_week_dates() %}
+              <th scope="col">*</th>
+              <th scope="col">Ponedeljek</th>
+              <th scope="col">Torek</th>
+              <th scope="col">Sreda</th>
+              <th scope="col">Četrtek</th>
+              <th scope="col">Petek</th>
+              <th scope="col">Sobota</th>
+              <th scope="col">Nedelja</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Datum</th>
+              <td>{{ Pylavor.date_to_string(this_week[0]) }}</td>
+              <td>{{ Pylavor.date_to_string(this_week[1]) }}</td>
+              <td>{{ Pylavor.date_to_string(this_week[2]) }}</td>
+              <td>{{ Pylavor.date_to_string(this_week[3]) }}</td>
+              <td>{{ Pylavor.date_to_string(this_week[4]) }}</td>
+              <td>{{ Pylavor.date_to_string(this_week[5]) }}</td>
+              <td>{{ Pylavor.date_to_string(this_week[6]) }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Glavna Jed</th>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[0])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[1])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[2])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[3])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[4])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[5])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[6])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Glavna Jed</th>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[0])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[1])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[2])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[3])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[4])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[5])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[6])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="col-sm-1">
+      </div>
+
+ 
+      </div>
+
+    <br>
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      <div class="col-sm-10">
+        <legend>Naslednji teden</legend> 
+
+        <table class="table">
+          <thead>
+            <tr>
+              {% set next_week = Meal.get_week_dates(1) %}
+              <th scope="col">*</th>
+              <th scope="col">Ponedeljek</th>
+              <th scope="col">Torek</th>
+              <th scope="col">Sreda</th>
+              <th scope="col">Četrtek</th>
+              <th scope="col">Petek</th>
+              <th scope="col">Sobota</th>
+              <th scope="col">Nedelja</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Datum</th>
+              <td>{{ Pylavor.date_to_string(next_week[0]) }}</td>
+              <td>{{ Pylavor.date_to_string(next_week[1]) }}</td>
+              <td>{{ Pylavor.date_to_string(next_week[2]) }}</td>
+              <td>{{ Pylavor.date_to_string(next_week[3]) }}</td>
+              <td>{{ Pylavor.date_to_string(next_week[4]) }}</td>
+              <td>{{ Pylavor.date_to_string(next_week[5]) }}</td>
+              <td>{{ Pylavor.date_to_string(next_week[6]) }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Glavna Jed</th>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[0])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[1])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[2])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[3])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[4])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[5])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[6])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Glavna Jed</th>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[0])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[1])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[2])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[3])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[4])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[5])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[6])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+ 
+      <div class="col-sm-1">
+      </div>
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Bootstrap JS -->
+    <script src="{{ url_for('static', filename='main_page_module/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+
+  </body>
+</html>
+
+
+  

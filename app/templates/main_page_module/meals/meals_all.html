@@ -1,0 +1,85 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet">
+
+{% endblock extraheader  %}
+
+{% block nav_freist %}text-secondary{% endblock nav_freist %}
+
+
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="">Vse Jedi</a></li>
+      </ol>
+    </nav>
+    
+    <div class="row">
+      <div class="col-sm-1">
+
+      </div>
+      
+      
+      <div class="col-sm-7">
+        <legend>Jedi</legend> 
+        
+        <table id="dishes_table" class="table table-bordered" style="width:100%">
+          <thead>
+              <tr>
+                  <th>Datum</th>
+                  <th>Glavna jed</th>
+                  <th>Priloga</th>
+                  <th>*</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for meal_date, data in Meal.get_all().items() %}
+            {% set meal = Meal(data) %}
+              <tr>
+                  <td><span class="badge text-bg-light">{{ Pylavor.date_to_string(meal.meal_date) }}</span></td>
+                  <td><span class="badge text-bg-light">{{ Dish.get_one(meal.main_dish)["name"] }}</span></td>
+                  <td><span class="badge text-bg-light">{{ Dish.get_one(meal.side_dish)["name"] }}</span></td>
+                  <td><a class="btn btn-outline-primary" href="{{ url_for('main_page_module.meals_view', meal_date=meal_date) }}" role="button">Preglej</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+      </div>
+
+
+        
+      <div class="col-sm-4">
+        <img src="{{ url_for('static', filename='artifacts/placeholder_vector.svg') }}" class="img-fluid" alt="...">
+        <hr>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+        <hr>
+        <div class="d-grid gap-2">
+          <div class="btn-group" role="group">
+            {% if session['user_id'] %}<a class="btn btn-primary" href="{{ url_for('main_page_module.meals_new') }}" role="button">Dodaj nov Obrok</a>{% endif %}
+          </div>
+        </div>
+      </div>
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
+  <script>
+    let table = new DataTable('#dishes_table');
+  </script>
+
+{% endblock content %}

@@ -1,0 +1,176 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+{% endblock extraheader  %}
+
+{% block nav_index %}text-secondary{% endblock nav_index %}
+
+
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    <div class="row">
+      <div class="col-sm-1">
+        <div class="d-grid gap-2">
+          <a class="btn btn-outline-danger btn-sm" href="{{ url_for('main_page_module.weekly_print') }}" role="button">Print</a>
+        </div>
+      </div>
+
+      <div class="col-sm-10">
+        <legend>Ta teden</legend> 
+
+        <table class="table">
+          <thead>
+            <tr>
+              {% set this_week = Meal.get_week_dates() %}
+              <th scope="col">*</th>
+              <th scope="col">Ponedeljek</th>
+              <th scope="col">Torek</th>
+              <th scope="col">Sreda</th>
+              <th scope="col">Četrtek</th>
+              <th scope="col">Petek</th>
+              <th scope="col">Sobota</th>
+              <th scope="col">Nedelja</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Datum</th>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=this_week[0]) }}" role="button">{{ Pylavor.date_to_string(this_week[0]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=this_week[1]) }}" role="button">{{ Pylavor.date_to_string(this_week[1]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=this_week[2]) }}" role="button">{{ Pylavor.date_to_string(this_week[2]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=this_week[3]) }}" role="button">{{ Pylavor.date_to_string(this_week[3]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=this_week[4]) }}" role="button">{{ Pylavor.date_to_string(this_week[4]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=this_week[5]) }}" role="button">{{ Pylavor.date_to_string(this_week[5]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=this_week[6]) }}" role="button">{{ Pylavor.date_to_string(this_week[6]) }}</a></td>
+            </tr>
+            <tr>
+              <th scope="row">Glavna Jed</th>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[0])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[1])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[2])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[3])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[4])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[5])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[6])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Glavna Jed</th>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[0])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[1])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[2])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[3])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[4])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[5])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(this_week[6])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="col-sm-1">
+        <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.generate_week', week=0) }}" role="button">Zgeneriraj jedilnik</a>
+      </div>
+
+ 
+      </div>
+
+    <br>
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      <div class="col-sm-10">
+        <legend>Naslednji teden</legend> 
+
+        <table class="table">
+          <thead>
+            <tr>
+              {% set next_week = Meal.get_week_dates(1) %}
+              <th scope="col">*</th>
+              <th scope="col">Ponedeljek</th>
+              <th scope="col">Torek</th>
+              <th scope="col">Sreda</th>
+              <th scope="col">Četrtek</th>
+              <th scope="col">Petek</th>
+              <th scope="col">Sobota</th>
+              <th scope="col">Nedelja</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Datum</th>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=next_week[0]) }}" role="button">{{ Pylavor.date_to_string(next_week[0]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=next_week[1]) }}" role="button">{{ Pylavor.date_to_string(next_week[1]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=next_week[2]) }}" role="button">{{ Pylavor.date_to_string(next_week[2]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=next_week[3]) }}" role="button">{{ Pylavor.date_to_string(next_week[3]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=next_week[4]) }}" role="button">{{ Pylavor.date_to_string(next_week[4]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=next_week[5]) }}" role="button">{{ Pylavor.date_to_string(next_week[5]) }}</a></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.meals_view', meal_date=next_week[6]) }}" role="button">{{ Pylavor.date_to_string(next_week[6]) }}</a></td>
+            </tr>
+            <tr>
+              <th scope="row">Glavna Jed</th>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[0])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[1])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[2])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[3])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[4])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[5])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[6])["main_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Glavna Jed</th>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[0])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[1])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[2])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[3])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[4])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[5])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+              {% set dish = Dish.get_one(Meal.get_one(next_week[6])["side_dish"]) %}
+              <td>{{ dish["name"] }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+ 
+      <div class="col-sm-1">
+        <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.generate_week', week=1) }}" role="button">Zgeneriraj jedilnik</a>
+      </div>
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}

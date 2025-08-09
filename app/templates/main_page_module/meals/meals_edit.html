@@ -1,0 +1,86 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+{% endblock extraheader  %}
+
+{% block nav_freist %}text-secondary{% endblock nav_freist %}
+
+{% macro render_field(field, placeholder=None) %}
+  <div class="mb-3">
+      {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+
+      {{ field.label }}
+
+      {% if field.errors %}
+          {% set css_class = css_class + ' is-invalid' %}
+
+          {% for error in field.errors %}
+              
+              <small id="{{ field.label.text }}" class="text-danger">
+                  {{ error }}
+            </small>
+
+          {% endfor %}
+          </ul>
+      {% endif %}
+
+      {{ field(class=css_class, autocomplete="off", placeholder=placeholder, **kwargs) }}
+  </div>
+{% endmacro %}
+
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.meals') }}">Vsi Obroki</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><a href="{{ url_for('main_page_module.meals_view', meal_date=form.meal_date.data) }}">Obrok</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Uredi Obrok {{ Pylavor.date_to_string(form.meal_date.data) }}</li>
+      </ol>
+    </nav>
+        
+    <div class="row">
+      <div class="col-sm-2">
+        
+      </div>
+      
+      
+      <div class="col-sm-8">
+
+        <form method="POST" action="{{ url_for('main_page_module.meals_edit') }}" accept-charset="UTF-8" role="form" enctype="multipart/form-data">
+          {{ form.csrf_token }}
+
+          <div class="row">
+            <div class="col-sm-3">
+              {{ render_field(form.meal_date, autofocus="") }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.main_dish, class="form-select") }}
+            </div>
+            <div class="col-sm-3">
+              {{ render_field(form.side_dish, class="form-select") }}
+            </div>
+            <div class="col-sm-3">
+            </div>
+          </div>
+ 
+
+          {{ form.submit(class="form-control btn btn-dark mb-2", value="Uredi") }}
+
+
+        </form>
+
+      </div>
+
+
+ 
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}
