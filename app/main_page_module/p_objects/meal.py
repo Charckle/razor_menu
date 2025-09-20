@@ -110,7 +110,6 @@ class Meal:
         
         all_main_dishes = [id_ for id_, _ in Dish.get_all(type_="1", planner_calc=True).items()]
         all_side_dishes = [id_ for id_, _ in Dish.get_all(type_="0", planner_calc=True).items()]
-        print(all_side_dishes)
         
         for date_ in dates:
             # main dish
