@@ -4,7 +4,7 @@ import os
 import itertools
 from PIL import Image
 from os.path import exists
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 from flask import url_for, session
 
@@ -15,6 +15,15 @@ from app import app
 
 from app.main_page_module.p_objects.dish import Dish
 
+
+def is_friday(date_):
+    date_obj = datetime.strptime(date_, "%Y-%m-%d")
+    
+    # weekday(): Monday=0, Sunday=6
+    
+    return date_obj.weekday() == 4
+    
+    
 
 class Meal:
     database_name = "meals_db.json"
@@ -102,6 +111,37 @@ class Meal:
         # Generate dates from Monday to Sunday
         return [(target_monday + timedelta(days=i)).isoformat() for i in range(7)]        
     
+    # Meal
+    def randomize(self):
+        all_main_dishes = [id_ for id_, _ in Dish.get_all(type_="1", planner_calc=True).items()]
+        all_side_dishes = [id_ for id_, _ in Dish.get_all(type_="0", planner_calc=True).items()]        
+    
+        index = random.randrange(0, len(all_main_dishes))
+        popped_item = all_main_dishes.pop(index)
+        main_dish = popped_item
+        
+        dish_data = Dish.get_one(main_dish)
+        
+        if dish_data["need_sidedish"] == "1":
+            # side dish
+            if len(all_side_dishes) == 0:
+                all_side_dishes = [id_ for id_, _ in Dish.get_all(type_="0", planner_calc=True).items()]   
+            if len(all_side_dishes) != 0:
+                index = random.randrange(0, len(all_side_dishes))
+                popped_item = all_side_dishes.pop(index)
+                side_dish = popped_item
+            else:
+                side_dish = ""
+                
+        else:
+            side_dish = ""        
+
+        
+        self.main_dish = main_dish
+        self.side_dish = side_dish    
+  
+        self.save()        
+        
     
     # Meal
     @staticmethod
@@ -110,29 +150,38 @@ class Meal:
         
         all_main_dishes = [id_ for id_, _ in Dish.get_all(type_="1", planner_calc=True).items()]
         all_side_dishes = [id_ for id_, _ in Dish.get_all(type_="0", planner_calc=True).items()]
-        
+        #O49PM
+       # print(dates)
+                
         for date_ in dates:
-            # main dish
-            if len(all_main_dishes) == 0:
-                all_main_dishes = [id_ for id_, _ in Dish.get_all(type_="1", planner_calc=True).items()]
-            index = random.randrange(0, len(all_main_dishes))
+            is_f = is_friday(date_)
             
-            popped_item = all_main_dishes.pop(index)
-            main_dish = popped_item
-            
-            dish_data = Dish.get_one(main_dish)
-            if dish_data["need_sidedish"] == "1":
-                # side dish
-                if len(all_side_dishes) == 0:
-                    all_side_dishes = [id_ for id_, _ in Dish.get_all(type_="0", planner_calc=True).items()]   
-                if len(all_side_dishes) != 0:
-                    index = random.randrange(0, len(all_side_dishes))
-                    popped_item = all_side_dishes.pop(index)
-                    side_dish = popped_item
+            if is_f == False:
+                # main dish
+                if len(all_main_dishes) == 0:
+                    all_main_dishes = [id_ for id_, _ in Dish.get_all(type_="1", planner_calc=True).items()]
+                index = random.randrange(0, len(all_main_dishes))
+                
+                popped_item = all_main_dishes.pop(index)
+                main_dish = popped_item
+                
+                dish_data = Dish.get_one(main_dish)
+                if dish_data["need_sidedish"] == "1":
+                    # side dish
+                    if len(all_side_dishes) == 0:
+                        all_side_dishes = [id_ for id_, _ in Dish.get_all(type_="0", planner_calc=True).items()]   
+                    if len(all_side_dishes) != 0:
+                        index = random.randrange(0, len(all_side_dishes))
+                        popped_item = all_side_dishes.pop(index)
+                        side_dish = popped_item
+                    else:
+                        side_dish = ""
+                        
                 else:
                     side_dish = ""
-                    
             else:
+                # always pizza
+                main_dish = "O49PM"
                 side_dish = ""
             
             meal_data = {"meal_date": date_,

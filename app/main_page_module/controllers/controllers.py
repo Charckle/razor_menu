@@ -260,6 +260,25 @@ def meals_edit(meal_date:str=None):
     return render_template("main_page_module/meals/meals_edit.html", form=form, meal=meal)
 
 
+@main_page_module.route('/meals_randomize/<meal_date>/<index_>', methods=['GET'])
+@main_page_module.route('/meals_randomize/<meal_date>', methods=['GET'])
+def meals_randomize(meal_date, index_=False):
+    meal_data = Meal.get_one(meal_date)
+    
+    if meal_data is False:
+        flash(f'Obrok ne obstaja.', 'error')
+        return redirect(url_for('main_page_module.meals'))            
+    
+    meal = Meal(meal_data)
+    meal.randomize()
+    
+    if index_:
+        return redirect(url_for("main_page_module.index"))
+    else:
+        return render_template("main_page_module/meals/meals_view.html", meal=meal)
+
+
+
 @main_page_module.route('/generate_week/<week>', methods=['GET'])
 @login_required
 def generate_week(week):

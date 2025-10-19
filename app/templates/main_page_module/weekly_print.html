@@ -86,7 +86,7 @@
               <td>{{ dish["name"] }}</td>
             </tr>
             <tr>
-              <th scope="row">Glavna Jed</th>
+              <th scope="row">Priloga</th>
               {% set dish = Dish.get_one(Meal.get_one(this_week[0])["side_dish"]) %}
               <td>{{ dish["name"] }}</td>
               {% set dish = Dish.get_one(Meal.get_one(this_week[1])["side_dish"]) %}
@@ -163,7 +163,7 @@
               <td>{{ dish["name"] }}</td>
             </tr>
             <tr>
-              <th scope="row">Glavna Jed</th>
+              <th scope="row">Priloga</th>
               {% set dish = Dish.get_one(Meal.get_one(next_week[0])["side_dish"]) %}
               <td>{{ dish["name"] }}</td>
               {% set dish = Dish.get_one(Meal.get_one(next_week[1])["side_dish"]) %}

@@ -64,7 +64,7 @@
               <td>{{ dish["name"] }}</td>
             </tr>
             <tr>
-              <th scope="row">Glavna Jed</th>
+              <th scope="row">Priloga</th>
               {% set dish = Dish.get_one(Meal.get_one(this_week[0])["side_dish"]) %}
               <td>{{ dish["name"] }}</td>
               {% set dish = Dish.get_one(Meal.get_one(this_week[1])["side_dish"]) %}
@@ -80,13 +80,27 @@
               {% set dish = Dish.get_one(Meal.get_one(this_week[6])["side_dish"]) %}
               <td>{{ dish["name"] }}</td>
             </tr>
+            {% if session['user_id'] %}
+            <tr>
+              <th scope="row">***</th>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=this_week[0], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=this_week[1], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=this_week[2], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=this_week[3], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=this_week[4], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=this_week[5], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=this_week [6], index_='index') }}" role="button">Radomize</a></td>
+            </tr>
+            {% endif %}
           </tbody>
         </table>
 
       </div>
 
       <div class="col-sm-1">
+        {% if session['user_id'] %}
         <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.generate_week', week=0) }}" role="button">Zgeneriraj jedilnik</a>
+        {% endif %}
       </div>
 
  
@@ -142,7 +156,7 @@
               <td>{{ dish["name"] }}</td>
             </tr>
             <tr>
-              <th scope="row">Glavna Jed</th>
+              <th scope="row">Priloga</th>
               {% set dish = Dish.get_one(Meal.get_one(next_week[0])["side_dish"]) %}
               <td>{{ dish["name"] }}</td>
               {% set dish = Dish.get_one(Meal.get_one(next_week[1])["side_dish"]) %}
@@ -158,13 +172,27 @@
               {% set dish = Dish.get_one(Meal.get_one(next_week[6])["side_dish"]) %}
               <td>{{ dish["name"] }}</td>
             </tr>
+            {% if session['user_id'] %}
+            <tr>
+              <th scope="row">***</th>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=next_week[0], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=next_week[1], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=next_week[2], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=next_week[3], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=next_week[4], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=next_week[5], index_='index') }}" role="button">Radomize</a></td>
+              <td><a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=next_week[6], index_='index') }}" role="button">Radomize</a></td>
+            </tr>
+            {% endif %}
           </tbody>
         </table>
 
       </div>
  
       <div class="col-sm-1">
+        {% if session['user_id'] %}
         <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('main_page_module.generate_week', week=1) }}" role="button">Zgeneriraj jedilnik</a>
+        {% endif %}
       </div>
 
  
