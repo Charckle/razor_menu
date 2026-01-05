@@ -1,0 +1,74 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+{% endblock extraheader  %}
+
+{% block nav_v_jedi %}text-secondary{% endblock nav_v_jedi %}
+
+{% macro render_field(field, placeholder=None) %}
+  <div class="mb-3">
+      {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+
+      {{ field.label }}
+
+      {% if field.errors %}
+          {% set css_class = css_class + ' is-invalid' %}
+
+          {% for error in field.errors %}
+              
+              <small id="{{ field.label.text }}" class="text-danger">
+                  {{ error }}
+            </small>
+
+          {% endfor %}
+          </ul>
+      {% endif %}
+
+      {{ field(class=css_class, autocomplete="off", placeholder=placeholder, **kwargs) }}
+  </div>
+{% endmacro %}
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.index') }}">Domov</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.day_special_foods') }}">Posebne jedi za dneve</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {% if day_of_week is not none %}
+            Uredi posebno jed
+          {% else %}
+            Nova posebna jed
+          {% endif %}
+        </li>
+      </ol>
+    </nav>
+        
+    <div class="row">
+      <div class="col-sm-2">
+      </div>
+      
+      <div class="col-sm-8">
+        <form method="POST" action="{{ url_for('main_page_module.day_special_foods_edit', day_of_week=day_of_week) if day_of_week is not none else url_for('main_page_module.day_special_foods_new') }}" accept-charset="UTF-8" role="form">
+          {{ form.csrf_token }}
+
+          {{ render_field(form.day_of_week, class="form-select") }}
+
+          {{ render_field(form.main_dish, class="form-select") }}
+
+          {{ render_field(form.side_dish, class="form-select") }}
+
+          {{ form.submit(class="form-control btn btn-dark mb-2", value="Shrani") }}
+        </form>
+      </div>
+
+      <div class="col-sm-2">
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+

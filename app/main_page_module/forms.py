@@ -17,6 +17,8 @@ import re
 import os.path
 
 from app.main_page_module.p_objects.dish import Dish
+from app.main_page_module.p_objects.day_special_food import DaySpecialFood
+from app.main_page_module.p_objects.ingredient import Ingredient
 
 
 
@@ -67,6 +69,9 @@ class MealForm(FlaskForm):
         validators.InputRequired(message='You need to specify the priloga')], 
                          choices=[('/', 'Brez')])
     
+    keep = SelectField('Ohrani pri generiranju:', [
+        validators.InputRequired(message='You need to specify if to keep')], 
+                         choices=[('0', 'Ne'), ('1', 'Da')])
     
     
     submit = SubmitField('Dodaj Obrok')
@@ -76,6 +81,60 @@ class MealForm(FlaskForm):
         super(MealForm, self).__init__(*args, **kwargs)
         self.main_dish.choices = [[id_, data_["name"]] for id_, data_ in Dish.get_all(type_="1").items()]  
         self.side_dish.choices += [[id_, data_["name"]] for id_, data_ in Dish.get_all(type_="0").items()]    
+
+class IngredientForm(FlaskForm):
+    ingredient_ref_num = HiddenField('ingredient_ref_num', [validators.InputRequired(message='Dont fiddle around with the code!')])
+    name = StringField('Ime', [validators.InputRequired(message='We need a name.'), validators.Length(max=150)])
+    unit_type = SelectField('Enota:', [
+        validators.InputRequired(message='You need to specify the unit type')], 
+                         choices=[])
+    
+    submit = SubmitField('Shrani')
+    
+    def __init__(self, *args, **kwargs):
+        super(IngredientForm, self).__init__(*args, **kwargs)
+        self.unit_type.choices = [[id_, name] for id_, name in Ingredient.get_unit_types().items()]
+
+
+class DishIngredientForm(FlaskForm):
+    ingredient_ref_num = SelectField('Sestavina:', [
+        validators.InputRequired(message='You need to select an ingredient')], 
+                         choices=[])
+    quantity = StringField('Količina', [validators.InputRequired(message='We need a quantity.'), validators.Length(max=50)])
+    
+    submit = SubmitField('Dodaj')
+    
+    def __init__(self, *args, **kwargs):
+        super(DishIngredientForm, self).__init__(*args, **kwargs)
+        self.ingredient_ref_num.choices = [[id_, data_["name"] + " (" + data_.get("unit_type", "") + ")"] for id_, data_ in Ingredient.get_all().items()]
+
+
+class DaySpecialFoodForm(FlaskForm):
+    day_of_week = SelectField('Dan v tednu:', [
+        validators.InputRequired(message='You need to specify the day of week')], 
+                         choices=[
+                             ('0', 'Ponedeljek'),
+                             ('1', 'Torek'),
+                             ('2', 'Sreda'),
+                             ('3', 'Četrtek'),
+                             ('4', 'Petek'),
+                             ('5', 'Sobota'),
+                             ('6', 'Nedelja')
+                         ])
+    
+    main_dish = SelectField('Glavna jed:', [
+        validators.InputRequired(message='You need to specify the main jed')], 
+                         choices=[])
+    
+    side_dish = SelectField('Priloga:', 
+                         choices=[('', 'Brez')])
+    
+    submit = SubmitField('Shrani')
+    
+    def __init__(self, *args, **kwargs):
+        super(DaySpecialFoodForm, self).__init__(*args, **kwargs)
+        self.main_dish.choices = [[id_, data_["name"]] for id_, data_ in Dish.get_all(type_="1").items()]  
+        self.side_dish.choices += [[id_, data_["name"]] for id_, data_ in Dish.get_all(type_="0").items()]
 
 class LoginForm(FlaskForm):
     username_or_email = StringField('Username or Email', [validators.InputRequired(message='Forgot your email address?')])
@@ -88,5 +147,8 @@ class LoginForm(FlaskForm):
  
 form_dicts = {"Meal": MealForm,
               "Dish": DishForm,
-              "Login": LoginForm
+              "Login": LoginForm,
+              "DaySpecialFood": DaySpecialFoodForm,
+              "Ingredient": IngredientForm,
+              "DishIngredient": DishIngredientForm
               } 

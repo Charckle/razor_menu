@@ -45,7 +45,6 @@
     <div class="row">
       <div class="col-sm-1">
         <a class="btn btn-outline-primary" href="{{ url_for('main_page_module.meals_edit', meal_date=meal['meal_date']) }}" role="button">Uredi</a>
-        <a class="btn btn-outline-primary" href="{{ url_for('main_page_module.meals_edit', meal_date=meal['meal_date']) }}" role="button">Uredi</a>
       </div>
       
       
@@ -55,18 +54,48 @@
               <tbody>
                 <tr>
                   <th scope="row">Datum</th>
-                  <td><b>{{ Pylavor.date_to_string(meal.meal_date) }}</b></td>
+                  <td><b>{{ Pylavor.date_to_string(meal["meal_date"]) }}</b></td>
                 </tr>
                 <tr>
                   <th scope="row">Glavna jed</th>
-                  <td><span class="badge text-bg-dark">{{ Dish.get_one(meal.main_dish)["name"] }}</span></td>
+                  <td><span class="badge text-bg-dark">{{ Dish.get_one(meal["main_dish"])["name"] }}</span></td>
                 </tr>
                 <tr>
                   <th scope="row">Priloga</th>
-                  <td><span class="badge text-bg-dark">{{ Dish.get_one(meal.side_dish)["name"] }}</span></td>
+                  <td><span class="badge text-bg-dark">{{ Dish.get_one(meal["side_dish"])["name"] }}</span></td>
                 </tr>
               </tbody>
             </table>
+            
+            <h4>Sestavine</h4>
+            {% set main_dish_ingredients = DishIngredient.get_for_dish(meal["main_dish"]) %}
+            {% set side_dish_ingredients = DishIngredient.get_for_dish(meal["side_dish"]) if meal["side_dish"] else [] %}
+            {% if main_dish_ingredients or side_dish_ingredients %}
+              <ul class="list-group">
+                {% if main_dish_ingredients %}
+                  {% for di in main_dish_ingredients %}
+                    {% set ingredient = Ingredient.get_one(di['ingredient_ref_num']) %}
+                    {% if ingredient %}
+                      <li class="list-group-item">
+                        <b>{{ Dish.get_one(meal["main_dish"])["name"] }}:</b> {{ ingredient['name'] }} - {{ di['quantity'] }} {{ ingredient.get('unit_type', '') }}
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                {% if side_dish_ingredients %}
+                  {% for di in side_dish_ingredients %}
+                    {% set ingredient = Ingredient.get_one(di['ingredient_ref_num']) %}
+                    {% if ingredient %}
+                      <li class="list-group-item">
+                        <b>{{ Dish.get_one(meal["side_dish"])["name"] }}:</b> {{ ingredient['name'] }} - {{ di['quantity'] }} {{ ingredient.get('unit_type', '') }}
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              </ul>
+            {% else %}
+              <p class="text-muted">Ni sestavin za ta obrok.</p>
+            {% endif %}
         </div>
       </div>
 
@@ -74,7 +103,7 @@
 
         
       <div class="col-sm-1">
-        <a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=meal['meal_date']) }}" role="button">Radomize</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.meals_randomize', meal_date=meal['meal_date']) }}" role="button">Randomize</a>
       </div>
 
  

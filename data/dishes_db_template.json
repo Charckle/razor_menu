@@ -1,0 +1,43 @@
+{
+  "O49PM": {
+    "dish_ref_num": "O49PM",
+    "name": "Pizza",
+    "type_": "meat",
+    "main_dish": "1",
+    "need_sidedish": "0",
+    "show_in_planner": "0"
+  },
+  "EXAMPLE1": {
+    "dish_ref_num": "EXAMPLE1",
+    "name": "Example Main Dish 1",
+    "type_": "meat",
+    "main_dish": "1",
+    "need_sidedish": "1",
+    "show_in_planner": "1"
+  },
+  "EXAMPLE2": {
+    "dish_ref_num": "EXAMPLE2",
+    "name": "Example Main Dish 2",
+    "type_": "vegetarian",
+    "main_dish": "1",
+    "need_sidedish": "0",
+    "show_in_planner": "1"
+  },
+  "EXAMPLE3": {
+    "dish_ref_num": "EXAMPLE3",
+    "name": "Example Side Dish 1",
+    "type_": "meat",
+    "main_dish": "0",
+    "need_sidedish": "0",
+    "show_in_planner": "1"
+  },
+  "EXAMPLE4": {
+    "dish_ref_num": "EXAMPLE4",
+    "name": "Example Side Dish 2",
+    "type_": "vegetarian",
+    "main_dish": "0",
+    "need_sidedish": "0",
+    "show_in_planner": "1"
+  }
+}
+

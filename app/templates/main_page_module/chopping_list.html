@@ -1,0 +1,63 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+{% endblock extraheader  %}
+
+{% block nav_index %}text-secondary{% endblock nav_index %}
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.index') }}">Domov</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Seznam sestavin za {% if week == 0 %}ta teden{% else %}naslednji teden{% endif %}</li>
+      </ol>
+    </nav>
+    
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      
+      <div class="col-sm-10">
+        <legend>Seznam sestavin za {% if week == 0 %}ta teden{% else %}naslednji teden{% endif %}</legend>
+        
+        {% if ingredients_dict %}
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Sestavina</th>
+                <th>Enota</th>
+                <th>Količine</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ingredient_ref_num, data in ingredients_dict.items() %}
+                <tr>
+                  <td><b>{{ data['ingredient']['name'] }}</b></td>
+                  <td>{{ data['ingredient']['unit_type'] }}</td>
+                  <td>{{ data['total_quantity'] }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="text-muted">Ni sestavin za ta teden.</p>
+        {% endif %}
+        
+        <div class="mt-3">
+          <a class="btn btn-outline-secondary" href="{{ url_for('main_page_module.index') }}" role="button">Nazaj</a>
+          <a class="btn btn-outline-primary" href="{{ url_for('main_page_module.chopping_list', week=0) }}" role="button">Ta teden</a>
+          <a class="btn btn-outline-primary" href="{{ url_for('main_page_module.chopping_list', week=1) }}" role="button">Naslednji teden</a>
+        </div>
+      </div>
+
+      <div class="col-sm-1">
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+

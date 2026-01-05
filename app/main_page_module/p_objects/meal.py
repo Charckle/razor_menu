@@ -14,6 +14,7 @@ import string
 from app import app
 
 from app.main_page_module.p_objects.dish import Dish
+from app.main_page_module.p_objects.day_special_food import DaySpecialFood
 
 
 def is_friday(date_):
@@ -32,12 +33,14 @@ class Meal:
     
     main_dish = None
     side_dish = None
+    keep = None
 
     
     def __init__(self, dish_data) -> None:
         self.meal_date = dish_data["meal_date"]
         self.main_dish = dish_data["main_dish"]
         self.side_dish = dish_data["side_dish"]
+        self.keep = dish_data.get("keep", "0")  # Default to "0" (not kept) for backward compatibility
     
     # Meal
     @staticmethod
@@ -113,9 +116,20 @@ class Meal:
     
     # Meal
     def randomize(self):
+        # Check if there's a special food for this day of week
+        special_food = DaySpecialFood.get_for_date(self.meal_date)
+        
+        if special_food and special_food.get("main_dish"):
+            # Use special food for this day
+            self.main_dish = special_food["main_dish"]
+            self.side_dish = special_food.get("side_dish", "")
+            self.save()
+            return
+        
+        # No special food, randomize normally
         all_main_dishes = [id_ for id_, _ in Dish.get_all(type_="1", planner_calc=True).items()]
         all_side_dishes = [id_ for id_, _ in Dish.get_all(type_="0", planner_calc=True).items()]        
-    
+        
         index = random.randrange(0, len(all_main_dishes))
         popped_item = all_main_dishes.pop(index)
         main_dish = popped_item
@@ -140,7 +154,7 @@ class Meal:
         self.main_dish = main_dish
         self.side_dish = side_dish    
   
-        self.save()        
+        self.save()
         
     
     # Meal
@@ -150,13 +164,23 @@ class Meal:
         
         all_main_dishes = [id_ for id_, _ in Dish.get_all(type_="1", planner_calc=True).items()]
         all_side_dishes = [id_ for id_, _ in Dish.get_all(type_="0", planner_calc=True).items()]
-        #O49PM
-       # print(dates)
                 
         for date_ in dates:
-            is_f = is_friday(date_)
+            # Check if meal exists and is marked as keep
+            existing_meal_data = Meal.get_one(date_)
+            if existing_meal_data and existing_meal_data.get("keep") == "1":
+                # Skip this day, keep the existing meal
+                continue
             
-            if is_f == False:
+            # Check if there's a special food for this day of week
+            special_food = DaySpecialFood.get_for_date(date_)
+            
+            if special_food and special_food.get("main_dish"):
+                # Use special food for this day
+                main_dish = special_food["main_dish"]
+                side_dish = special_food.get("side_dish", "")
+            else:
+                # No special food, randomize normally
                 # main dish
                 if len(all_main_dishes) == 0:
                     all_main_dishes = [id_ for id_, _ in Dish.get_all(type_="1", planner_calc=True).items()]
@@ -179,14 +203,16 @@ class Meal:
                         
                 else:
                     side_dish = ""
-            else:
-                # always pizza
-                main_dish = "O49PM"
-                side_dish = ""
+            
+            # Preserve keep status if meal already exists
+            keep_status = "0"
+            if existing_meal_data:
+                keep_status = existing_meal_data.get("keep", "0")
             
             meal_data = {"meal_date": date_,
                 "main_dish": main_dish,
-                "side_dish": side_dish
+                "side_dish": side_dish,
+                "keep": keep_status
                 }
             meal = Meal(meal_data)
             meal.save()
@@ -196,7 +222,8 @@ class Meal:
     def to_json(self):
         data_ = {"meal_date": self.meal_date,
                  "main_dish": self.main_dish,
-                 "side_dish": self.side_dish
+                 "side_dish": self.side_dish,
+                 "keep": self.keep
             }
 
         return data_

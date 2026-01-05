@@ -1,0 +1,73 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet">
+{% endblock extraheader  %}
+
+{% block nav_v_jedi %}text-secondary{% endblock nav_v_jedi %}
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.index') }}">Domov</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Sestavine</li>
+      </ol>
+    </nav>
+    
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      
+      <div class="col-sm-7">
+        <legend>Sestavine</legend> 
+        
+        <table id="ingredients_table" class="table table-bordered" style="width:100%">
+          <thead>
+              <tr>
+                  <th>Ime</th>
+                  <th>Enota</th>
+                  <th>*</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for ingredient_ref_num, data in Ingredient.get_all().items() %}
+              {% set ingredient = Ingredient(data) %}
+              <tr>
+                  <td>{{ ingredient.name }}</td>
+                  <td>{{ ingredient.unit_type }}</td>
+                  <td><a class="btn btn-outline-primary" href="{{ url_for('main_page_module.ingredients_view', ingredient_ref_num=ingredient_ref_num) }}" role="button">Preglej</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+      </div>
+
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Sestavine</h5>
+            <p class="card-text">Upravljajte sestavine, ki se uporabljajo v jedeh. Najprej ustvarite sestavino z imenom in enoto, nato jo dodajte jedi z določeno količino.</p>
+            <hr>
+            <div class="d-grid gap-2">
+              <a class="btn btn-primary" href="{{ url_for('main_page_module.ingredients_new') }}" role="button">Dodaj novo sestavino</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+  <script>
+    let table = new DataTable('#ingredients_table');
+  </script>
+
+{% endblock content %}
+

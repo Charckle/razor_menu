@@ -81,13 +81,27 @@
             </table>
 
               <h4>Sestavine</h4>
-            <ul class="list-group">
-              <li class="list-group-item">An item</li>
-              <li class="list-group-item">A second item</li>
-              <li class="list-group-item">A third item</li>
-              <li class="list-group-item">A fourth item</li>
-              <li class="list-group-item">And a fifth one</li>
-            </ul>
+            {% set dish_ingredients = DishIngredient.get_for_dish(dish['dish_ref_num']) %}
+            {% if dish_ingredients %}
+              <ul class="list-group mb-3">
+                {% for di in dish_ingredients %}
+                  {% set ingredient = Ingredient.get_one(di['ingredient_ref_num']) %}
+                  {% if ingredient %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <span>{{ ingredient['name'] }} - {{ di['quantity'] }} {{ ingredient.get('unit_type', '') }}</span>
+                      {% if session['user_id'] %}
+                        <a class="btn btn-outline-danger btn-sm" href="{{ url_for('main_page_module.dish_ingredients_delete', dish_ref_num=dish['dish_ref_num'], ingredient_ref_num=di['ingredient_ref_num']) }}" role="button" onclick="return confirm('Ali ste prepričani, da želite izbrisati sestavino?')">Izbriši</a>
+                      {% endif %}
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-muted">Ni sestavin.</p>
+            {% endif %}
+            {% if session['user_id'] %}
+              <a class="btn btn-primary" href="{{ url_for('main_page_module.dish_ingredients_add', dish_ref_num=dish['dish_ref_num']) }}" role="button">Dodaj sestavino</a>
+            {% endif %}
 
           </div>
 

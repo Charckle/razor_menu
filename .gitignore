@@ -8,7 +8,11 @@ to-do.txt
 logs/
 *.log
 .env
-data/
+data/*
+# exception to the rule - template files
+!data/dishes_db_template.json
+!data/meals_db_template.json
+!data/day_special_foods_db_template.json
 envir/
 
 app/files_u/*

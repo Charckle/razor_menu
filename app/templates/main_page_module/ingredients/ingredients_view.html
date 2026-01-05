@@ -1,0 +1,47 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+{% endblock extraheader  %}
+
+{% block nav_v_jedi %}text-secondary{% endblock nav_v_jedi %}
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.index') }}">Domov</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.ingredients') }}">Sestavine</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Sestavina <span class="badge text-bg-dark">{{ingredient["ingredient_ref_num"]}}</span></li>
+      </ol>
+    </nav>
+        
+    <div class="row">
+      <div class="col-sm-1">
+        <a class="btn btn-outline-primary" href="{{ url_for('main_page_module.ingredients_edit', ingredient_ref_num=ingredient['ingredient_ref_num']) }}" role="button">Uredi</a>
+      </div>
+      
+      <div class="col-sm-10">              
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="row">Ime</th>
+              <td><b>{{ingredient["name"]}}</b></td>
+            </tr>
+            <tr>
+              <th scope="row">Enota</th>
+              <td><span class="badge text-bg-dark">{{ ingredient["unit_type"] }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-sm-1">
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+

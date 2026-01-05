@@ -43,6 +43,8 @@
             <li><a href="{{ url_for('main_page_module.index') }}" class="nav-link px-2 {% block nav_index %}text-white{% endblock nav_index %}"><i class="bi bi-house"></i> Domov</a></li>
             <li><a href="{{ url_for('main_page_module.meals') }}" class="nav-link px-2 {% block nav_v_obr %}text-white{% endblock nav_v_obr %}"><i class="bi bi-basket"></i> Vsi obroki</a></li>
             <li><a href="{{ url_for('main_page_module.dishes') }}" class="nav-link px-2 {% block nav_v_jedi %}text-white{% endblock nav_v_jedi %}"><i class="bi bi-backpack2"></i> Vse jedi</a></li>
+            {% if session['user_id'] %}<li><a href="{{ url_for('main_page_module.ingredients') }}" class="nav-link px-2 {% block nav_ingredients %}text-white{% endblock nav_ingredients %}"><i class="bi bi-list-ul"></i> Sestavine</a></li>{% endif %}
+            {% if session['user_id'] %}<li><a href="{{ url_for('main_page_module.day_special_foods') }}" class="nav-link px-2 {% block nav_day_special %}text-white{% endblock nav_day_special %}"><i class="bi bi-calendar-event"></i> Posebne jedi</a></li>{% endif %}
           </ul>
           
           <div class="text-end d-flex align-items-center">

@@ -1,0 +1,86 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<link href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet">
+{% endblock extraheader  %}
+
+{% block nav_v_jedi %}text-secondary{% endblock nav_v_jedi %}
+
+{% block content%}
+
+  <div class="container-fluid" >
+    <br>
+    
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('main_page_module.index') }}">Domov</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Posebne jedi za dneve</li>
+      </ol>
+    </nav>
+    
+    <div class="row">
+      <div class="col-sm-1">
+      </div>
+      
+      <div class="col-sm-7">
+        <legend>Posebne jedi za dneve v tednu</legend> 
+        
+        <table id="day_special_foods_table" class="table table-bordered" style="width:100%">
+          <thead>
+              <tr>
+                  <th>Dan</th>
+                  <th>Glavna jed</th>
+                  <th>Priloga</th>
+                  <th>*</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for day_of_week, data in DaySpecialFood.get_all().items() %}
+              {% set special_food = DaySpecialFood(data) %}
+              {% set main_dish = Dish.get_one(special_food.main_dish) %}
+              <tr>
+                  <td>{{ DaySpecialFood.get_day_name(special_food.day_of_week) }}</td>
+                  <td>{{ main_dish["name"] if main_dish else "N/A" }}</td>
+                  <td>
+                    {% if special_food.side_dish %}
+                      {% set side_dish = Dish.get_one(special_food.side_dish) %}
+                      {{ side_dish["name"] if side_dish else "N/A" }}
+                    {% else %}
+                      Brez
+                    {% endif %}
+                  </td>
+                  <td>
+                    <a class="btn btn-outline-primary btn-sm" href="{{ url_for('main_page_module.day_special_foods_edit', day_of_week=special_food.day_of_week) }}" role="button">Uredi</a>
+                    <a class="btn btn-outline-danger btn-sm" href="{{ url_for('main_page_module.day_special_foods_delete', day_of_week=special_food.day_of_week) }}" role="button" onclick="return confirm('Ali ste prepričani, da želite izbrisati posebno jed za ta dan?')">Izbriši</a>
+                  </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+      </div>
+
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Posebne jedi za dneve</h5>
+            <p class="card-text">Nastavite posebne jedi, ki se bodo vedno uporabile za določene dneve v tednu. Ko boste generirali jedilnik, se bodo te jedi avtomatsko uporabile namesto naključnih.</p>
+            <hr>
+            <div class="d-grid gap-2">
+              <a class="btn btn-primary" href="{{ url_for('main_page_module.day_special_foods_new') }}" role="button">Dodaj novo posebno jed</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+  <script>
+    let table = new DataTable('#day_special_foods_table');
+  </script>
+
+{% endblock content %}
+
