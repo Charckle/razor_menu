@@ -106,7 +106,10 @@ class DishIngredientForm(FlaskForm):
     
     def __init__(self, *args, **kwargs):
         super(DishIngredientForm, self).__init__(*args, **kwargs)
-        self.ingredient_ref_num.choices = [[id_, data_["name"] + " (" + data_.get("unit_type", "") + ")"] for id_, data_ in Ingredient.get_all().items()]
+        # Get all ingredients and sort them alphabetically by name
+        all_ingredients = Ingredient.get_all()
+        sorted_ingredients = sorted(all_ingredients.items(), key=lambda x: x[1]["name"].lower())
+        self.ingredient_ref_num.choices = [[id_, data_["name"] + " (" + data_.get("unit_type", "") + ")"] for id_, data_ in sorted_ingredients]
 
 
 class DaySpecialFoodForm(FlaskForm):
