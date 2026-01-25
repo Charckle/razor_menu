@@ -105,6 +105,55 @@
     color: #adb5bd;
     font-style: italic;
   }
+  .table-responsive-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+  }
+  .table-responsive-wrapper table {
+    min-width: 800px;
+    width: 100%;
+    margin-bottom: 0;
+  }
+  @media (max-width: 991.98px) {
+    .container-fluid {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+    .week-card {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .table-responsive-wrapper {
+      border-radius: 0 0 12px 12px;
+      margin: 0;
+    }
+    .table-responsive-wrapper::-webkit-scrollbar {
+      height: 8px;
+    }
+    .table-responsive-wrapper::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 0 0 12px 12px;
+    }
+    .table-responsive-wrapper::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+    .table-responsive-wrapper::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  }
+  @media (max-width: 575.98px) {
+    .container-fluid {
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
+    }
+    .table-responsive-wrapper table {
+      min-width: 700px;
+    }
+  }
 </style>
 {% endblock extraheader  %}
 
@@ -126,16 +175,17 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row g-0 g-lg-3">
       <!-- This Week -->
-      <div class="col-lg-10">
+      <div class="col-12 col-lg-10">
         <div class="card week-card border-0">
           <div class="week-header">
             <h2><i class="bi bi-calendar3"></i> Ta teden</h2>
           </div>
           <div class="card-body p-0">
-            {% set this_week = Meal.get_week_dates() %}
-            <table class="table meal-table mb-0">
+            <div class="table-responsive-wrapper">
+              {% set this_week = Meal.get_week_dates() %}
+              <table class="table meal-table mb-0">
               <thead>
                 <tr>
                   <th scope="col" style="width: 120px;">*</th>
@@ -413,11 +463,12 @@
                 {% endif %}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-lg-2">
+      <div class="col-12 col-lg-2 mt-3 mt-lg-0">
         {% if session['user_id'] %}
         <div class="sidebar-actions">
           <div class="d-grid gap-2">
@@ -434,15 +485,16 @@
     </div>
 
     <!-- Next Week -->
-    <div class="row mt-4">
-      <div class="col-lg-10">
+    <div class="row mt-4 g-0 g-lg-3">
+      <div class="col-12 col-lg-10">
         <div class="card week-card border-0">
           <div class="week-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
             <h2><i class="bi bi-calendar3-week"></i> Naslednji teden</h2>
           </div>
           <div class="card-body p-0">
-            {% set next_week = Meal.get_week_dates(1) %}
-            <table class="table meal-table mb-0">
+            <div class="table-responsive-wrapper">
+              {% set next_week = Meal.get_week_dates(1) %}
+              <table class="table meal-table mb-0">
               <thead>
                 <tr>
                   <th scope="col" style="width: 120px;">*</th>
@@ -720,11 +772,12 @@
                 {% endif %}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       </div>
  
-      <div class="col-lg-2">
+      <div class="col-12 col-lg-2 mt-3 mt-lg-0">
         {% if session['user_id'] %}
         <div class="sidebar-actions">
           <div class="d-grid gap-2">

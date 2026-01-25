@@ -16,6 +16,38 @@
     
     <script src="{{ url_for('static', filename='main_page_module/jquerry/jquery-3.5.1.min.js') }}"></script>
 
+    <style>
+      /* Prevent horizontal overflow */
+      html, body {
+        overflow-x: hidden;
+        max-width: 100%;
+      }
+      /* Ensure navbar toggler works on mobile */
+      .navbar-toggler {
+        border: none;
+        padding: 0.25rem 0.5rem;
+      }
+      .navbar-toggler:focus {
+        box-shadow: none;
+      }
+      /* Active nav link styling */
+      .navbar-nav .nav-link.active,
+      .navbar-nav .nav-link.text-secondary {
+        color: rgba(255, 255, 255, 0.75) !important;
+        font-weight: 500;
+      }
+      /* Mobile menu improvements */
+      @media (max-width: 991.98px) {
+        .navbar-collapse {
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .navbar-nav .nav-link {
+          padding: 0.5rem 0;
+        }
+      }
+    </style>
 
     {% block extraheader %}
     {% endblock extraheader %}
@@ -32,28 +64,58 @@
   </svg>
     
   <body>
-    <header class="p-3 text-bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap" style="fill: rgb(235, 235, 235); "><use xlink:href="#bootstrap"></use></svg>
-          </a>
-  
-          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="{{ url_for('main_page_module.index') }}" class="nav-link px-2 {% block nav_index %}text-white{% endblock nav_index %}"><i class="bi bi-house"></i> Domov</a></li>
-            <li><a href="{{ url_for('main_page_module.meals') }}" class="nav-link px-2 {% block nav_v_obr %}text-white{% endblock nav_v_obr %}"><i class="bi bi-basket"></i> Vsi obroki</a></li>
-            <li><a href="{{ url_for('main_page_module.dishes') }}" class="nav-link px-2 {% block nav_v_jedi %}text-white{% endblock nav_v_jedi %}"><i class="bi bi-backpack2"></i> Vse jedi</a></li>
-            {% if session['user_id'] %}<li><a href="{{ url_for('main_page_module.ingredients') }}" class="nav-link px-2 {% block nav_ingredients %}text-white{% endblock nav_ingredients %}"><i class="bi bi-list-ul"></i> Sestavine</a></li>{% endif %}
-            {% if session['user_id'] %}<li><a href="{{ url_for('main_page_module.day_special_foods') }}" class="nav-link px-2 {% block nav_day_special %}text-white{% endblock nav_day_special %}"><i class="bi bi-calendar-event"></i> Posebne jedi</a></li>{% endif %}
+        <a class="navbar-brand d-flex align-items-center" href="/">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap" style="fill: rgb(235, 235, 235); "><use xlink:href="#bootstrap"></use></svg>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link {% block nav_index %}{% endblock nav_index %}" href="{{ url_for('main_page_module.index') }}">
+                <i class="bi bi-house"></i> <span class="d-lg-inline">Domov</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% block nav_v_obr %}{% endblock nav_v_obr %}" href="{{ url_for('main_page_module.meals') }}">
+                <i class="bi bi-basket"></i> <span class="d-lg-inline">Vsi obroki</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% block nav_v_jedi %}{% endblock nav_v_jedi %}" href="{{ url_for('main_page_module.dishes') }}">
+                <i class="bi bi-backpack2"></i> <span class="d-lg-inline">Vse jedi</span>
+              </a>
+            </li>
+            {% if session['user_id'] %}
+            <li class="nav-item">
+              <a class="nav-link {% block nav_ingredients %}{% endblock nav_ingredients %}" href="{{ url_for('main_page_module.ingredients') }}">
+                <i class="bi bi-list-ul"></i> <span class="d-lg-inline">Sestavine</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% block nav_day_special %}{% endblock nav_day_special %}" href="{{ url_for('main_page_module.day_special_foods') }}">
+                <i class="bi bi-calendar-event"></i> <span class="d-lg-inline">Posebne jedi</span>
+              </a>
+            </li>
+            {% endif %}
           </ul>
-          
-          <div class="text-end d-flex align-items-center">
-            <!-- Login Button -->
-            {% if session['user_id'] %}<a type="button" class="btn btn-outline-light me-2" href="{{ url_for('main_page_module.logout') }}">Logout</a>{% endif %}
-        </div>
+          <div class="d-flex">
+            {% if session['user_id'] %}
+              <a class="btn btn-outline-light" href="{{ url_for('main_page_module.logout') }}">
+                <i class="bi bi-box-arrow-right"></i> Logout
+              </a>
+            {% else %}
+              <a class="btn btn-outline-light" href="{{ url_for('main_page_module.login') }}">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+              </a>
+            {% endif %}
+          </div>
         </div>
       </div>
-    </header>
+    </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
